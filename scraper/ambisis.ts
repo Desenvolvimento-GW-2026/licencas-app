@@ -49,7 +49,7 @@ async function doScrape(page: import("playwright").Page): Promise<number> {
   const ts = () => new Date().toISOString();
 
   console.log(`[scraper] ${ts()} logging in`);
-  await page.goto(`${AMBISIS_URL}/login`, { waitUntil: "networkidle" });
+  await page.goto(`${AMBISIS_URL}/login`, { waitUntil: "domcontentloaded" });
   await page.fill('input[name="email"], input[type="email"]', EMAIL);
   await page.fill('input[name="password"], input[type="password"]', PASSWORD);
   await page.click('button[type="submit"]');
@@ -58,7 +58,7 @@ async function doScrape(page: import("playwright").Page): Promise<number> {
   console.log(`[scraper] ${ts()} navigating to dashboard`);
   await page.goto(
     `${AMBISIS_URL}/dashboards-inteligentes/dashboards?dashboard=padrao`,
-    { waitUntil: "networkidle", timeout: 60000 }
+    { waitUntil: "domcontentloaded", timeout: 60000 }
   );
 
   await page.waitForSelector("table, [class*='table'], [class*='grid']", { timeout: 30000 });
