@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { signOut } from "next-auth/react";
 import SummaryCards from "@/components/SummaryCards";
 import Filters, { FilterState } from "@/components/Filters";
 import LicenseTable from "@/components/LicenseTable";
@@ -66,8 +65,8 @@ export default function DashboardPage() {
           />
           <span style={{ fontWeight: 700, fontSize: 16 }}>Licenças de Poços</span>
         </div>
-        <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
+        <a
+          href="https://desenvolvimentogw.com.br"
           style={{
             background: "transparent",
             border: "1px solid rgba(255,255,255,0.4)",
@@ -76,10 +75,11 @@ export default function DashboardPage() {
             padding: "6px 14px",
             cursor: "pointer",
             fontSize: 13,
+            textDecoration: "none",
           }}
         >
           Sair
-        </button>
+        </a>
       </header>
 
       <main style={{ padding: "24px" }}>
