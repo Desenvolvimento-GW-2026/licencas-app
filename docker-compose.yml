@@ -11,6 +11,7 @@ services:
       DATABASE_URL: file:/data/prod.db
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       NEXTAUTH_URL: https://licencas.desenvolvimentogw.com.br
+      AUTH_TRUST_HOST: "true"
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     volumes:
