@@ -136,7 +136,10 @@ export async function scrapeAmbisis(): Promise<number> {
   const ts = () => new Date().toISOString();
   console.log(`[scraper] ${ts()} starting`);
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+  });
   const page = await browser.newPage();
 
   try {
