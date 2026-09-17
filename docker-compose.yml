@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: file:/data/prod.db
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: https://licencas.desenvolvimentogw.com.br
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - db_data:/data
+    expose:
+      - "3000"
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.scheduler
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: file:/data/prod.db
+      AMBISIS_EMAIL: ${AMBISIS_EMAIL}
+      AMBISIS_PASSWORD: ${AMBISIS_PASSWORD}
+    volumes:
+      - db_data:/data
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - certbot_www:/var/www/certbot:ro
+      - certbot_conf:/etc/letsencrypt:ro
+    depends_on:
+      - app
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
+    entrypoint: >
+      /bin/sh -c "trap exit TERM;
+      while :; do
+        certbot renew --webroot -w /var/www/certbot --quiet;
+        sleep 12h & wait $${!};
+      done"
+
+volumes:
+  db_data:
+  certbot_www:
+  certbot_conf:
